@@ -614,3 +614,241 @@ def validar_campos_obligatorios(campos):
 
     return True
 
+
+# 4. FORMULARIOS Y OPERACIONES
+def limpiar_formulario():
+
+    entradas = [
+        entrada_nombre,
+        entrada_dni,
+        entrada_direccion,
+        entrada_telefono,
+        entrada_edad,
+        entrada_sexo,
+        entrada_fecha_nacimiento,
+        entrada_procedencia,
+        entrada_grado,
+        entrada_estado_civil,
+        entrada_ocupacion,
+        entrada_acompanante,
+        entrada_parentesco,
+        entrada_telefono_acompanante,
+        entrada_fecha_cita,
+        entrada_hora_cita,
+        entrada_medico
+    ]
+
+    for entrada in entradas:
+        entrada.delete(0, tk.END)
+
+
+# AGENDAR CITA
+# RF01 + RF02
+
+def agendar_cita():
+
+    try:
+
+        nombre = entrada_nombre.get().strip()
+        dni = entrada_dni.get().strip()
+        direccion = entrada_direccion.get().strip()
+        telefono = entrada_telefono.get().strip()
+        edad = entrada_edad.get().strip()
+        sexo = entrada_sexo.get().strip()
+        fecha_nacimiento = entrada_fecha_nacimiento.get().strip()
+        procedencia = entrada_procedencia.get().strip()
+        grado = entrada_grado.get().strip()
+        estado_civil = entrada_estado_civil.get().strip()
+        ocupacion = entrada_ocupacion.get().strip()
+        acompanante = entrada_acompanante.get().strip()
+        parentesco = entrada_parentesco.get().strip()
+        telefono_acompanante = (
+            entrada_telefono_acompanante.get().strip()
+        )
+
+        fecha_cita = entrada_fecha_cita.get().strip()
+        hora_cita = entrada_hora_cita.get().strip()
+        nombre_medico = entrada_medico.get().strip()
+
+        # ----------------------------------------------------
+        # VALIDACIÓN
+        # ----------------------------------------------------
+
+        campos_obligatorios = [
+            nombre,
+            dni,
+            telefono,
+            edad,
+            sexo,
+            fecha_cita,
+            hora_cita,
+            nombre_medico
+        ]
+
+        if not validar_campos_obligatorios(
+            campos_obligatorios
+        ):
+
+            messagebox.showwarning(
+                "Datos incompletos",
+                "Complete todos los campos obligatorios."
+            )
+
+            return
+
+        if not validar_dni(dni):
+            messagebox.showwarning("DNI incorrecto", "El DNI debe tener 8 dígitos.")
+            return
+        if not validar_telefono(telefono):
+            messagebox.showwarning("Teléfono incorrecto", "El teléfono debe tener 9 dígitos.")
+            return
+        if not validar_fecha(fecha_cita) or not validar_hora(hora_cita):
+            messagebox.showwarning("Fecha u hora incorrecta", "Use DD/MM/AAAA y HH:MM (24 horas).")
+            return
+
+        # ----------------------------------------------------
+        # VALIDAR EDAD
+        # ----------------------------------------------------
+
+        try:
+
+            edad_numero = int(edad)
+
+            if edad_numero < 0 or edad_numero > 120:
+
+                messagebox.showwarning(
+                    "Edad incorrecta",
+                    "Ingrese una edad válida entre 0 y 120."
+                )
+
+                return
+
+        except ValueError:
+
+            messagebox.showwarning(
+                "Edad incorrecta",
+                "La edad debe ser un número entero."
+            )
+
+            return
+
+        # ----------------------------------------------------
+        # BUSCAR PACIENTE
+        # ----------------------------------------------------
+
+        paciente = buscar_paciente_por_dni(dni)
+
+        if paciente is None:
+
+            codigo_paciente = generar_codigo_paciente()
+
+            paciente = Paciente(
+                codigo_paciente,
+                nombre,
+                dni,
+                direccion,
+                telefono,
+                edad_numero,
+                sexo,
+                fecha_nacimiento,
+                procedencia,
+                grado,
+                estado_civil,
+                ocupacion,
+                acompanante,
+                parentesco,
+                telefono_acompanante
+            )
+
+            mensaje_paciente = (
+                "Paciente registrado correctamente."
+            )
+
+        else:
+
+            mensaje_paciente = (
+                "Paciente existente encontrado."
+            )
+
+        # ----------------------------------------------------
+        # BUSCAR MÉDICO
+        # ----------------------------------------------------
+
+        medico = buscar_medico_por_nombre(
+            nombre_medico
+        )
+
+        if medico is None:
+
+            messagebox.showerror(
+                "Médico no encontrado",
+                "El médico ingresado no existe.\n\n"
+                "Médicos disponibles:\n"
+                "Dr. Carlos Perez\n"
+                "Dra. Maria Lopez\n"
+                "Dr. Juan Torres"
+            )
+
+            return
+
+        # ----------------------------------------------------
+        # VERIFICAR DISPONIBILIDAD
+        # ----------------------------------------------------
+
+        if not verificar_disponibilidad(
+            medico,
+            fecha_cita,
+            hora_cita
+        ):
+
+            messagebox.showerror(
+                "Horario ocupado",
+                "El médico ya tiene una cita "
+                "programada en esa fecha y hora."
+            )
+
+            return
+
+        # ----------------------------------------------------
+        # CREAR CITA
+        # ----------------------------------------------------
+
+        codigo_cita = generar_codigo_cita()
+
+        nueva_cita = Cita(
+            codigo_cita,
+            paciente,
+            medico,
+            fecha_cita,
+            hora_cita
+        )
+
+        if buscar_paciente_por_dni(dni) is None:
+            gestor.registrar_paciente(paciente)
+        gestor.registrar_cita(nueva_cita)
+
+        lista_citas.insert(
+            tk.END,
+            nueva_cita.mostrar_cita()
+        )
+
+        messagebox.showinfo(
+            "Cita registrada",
+            mensaje_paciente
+            + "\n\n"
+            + "Cita registrada correctamente."
+            + "\nCódigo de cita: "
+            + codigo_cita
+        )
+
+        limpiar_formulario()
+
+    except Exception:
+        logging.warning("No se pudo registrar una cita")
+        messagebox.showerror(
+            "Error",
+            "Ocurrió un problema durante "
+            "el registro.\n\n"
+            + "Revise los datos o contacte al administrador."
+        )
+
