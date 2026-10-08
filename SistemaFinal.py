@@ -1318,4 +1318,634 @@ def cancelar_cita():
         "La cita fue cancelada correctamente."
     )
 
+# INTERFAZ GRÁFICA PRINCIPAL
+
+# MVC: el controlador recibe eventos de la vista Tkinter.
+# El modelo son las clases y el gestor definidos arriba.
+# 5. CONTROLADOR DE EVENTOS (MVC)
+class ControladorClinica:
+    def agendar(self):
+        agendar_cita()
+
+    def atender(self):
+        registrar_atencion()
+
+    def ver_pacientes(self):
+        mostrar_pacientes()
+
+    def cancelar(self):
+        cancelar_cita()
+
+    def estadisticas(self):
+        mostrar_estadisticas()
+
+    def limpiar(self):
+        limpiar_formulario()
+
+    def buscar(self):
+        buscar_paciente()
+
+    def historia(self):
+        consultar_historia()
+
+
+controlador = ControladorClinica()
+
+# 6. INTERFAZ GRAFICA ORIGINAL
+ventana = tk.Tk()
+
+ventana.title(
+    "Club Salud - Sistema de Gestión"
+)
+
+ventana.geometry(
+    "1150x900"
+)
+
+
+# TÍTULO
+
+titulo = tk.Label(
+    ventana,
+    text="CLUB SALUD",
+    font=("Arial", 22, "bold")
+)
+
+titulo.pack(pady=10)
+
+
+subtitulo = tk.Label(
+    ventana,
+    text=(
+        "Sistema de gestión de pacientes, "
+        "citas y atenciones médicas"
+    ),
+    font=("Arial", 11)
+)
+
+subtitulo.pack()
+
+
+# FRAME PACIENTE
+
+frame_paciente = tk.LabelFrame(
+    ventana,
+    text="Datos generales del paciente",
+    padx=10,
+    pady=10
+)
+
+frame_paciente.pack(
+    padx=15,
+    pady=10,
+    fill="x"
+)
+
+
+# FILA 1
+
+tk.Label(
+    frame_paciente,
+    text="Nombre:"
+).grid(row=0, column=0, padx=5, pady=5)
+
+entrada_nombre = tk.Entry(
+    frame_paciente,
+    width=25
+)
+
+entrada_nombre.grid(
+    row=0,
+    column=1,
+    padx=5
+)
+
+
+tk.Label(
+    frame_paciente,
+    text="DNI:"
+).grid(row=0, column=2, padx=5)
+
+entrada_dni = tk.Entry(
+    frame_paciente,
+    width=20
+)
+
+entrada_dni.grid(
+    row=0,
+    column=3,
+    padx=5
+)
+
+
+# FILA 2
+
+tk.Label(
+    frame_paciente,
+    text="Dirección:"
+).grid(row=1, column=0, padx=5, pady=5)
+
+entrada_direccion = tk.Entry(
+    frame_paciente,
+    width=25
+)
+
+entrada_direccion.grid(
+    row=1,
+    column=1,
+    padx=5
+)
+
+
+tk.Label(
+    frame_paciente,
+    text="Teléfono:"
+).grid(row=1, column=2, padx=5)
+
+entrada_telefono = tk.Entry(
+    frame_paciente,
+    width=20
+)
+
+entrada_telefono.grid(
+    row=1,
+    column=3,
+    padx=5
+)
+
+
+# FILA 3
+
+tk.Label(
+    frame_paciente,
+    text="Edad:"
+).grid(row=2, column=0, padx=5, pady=5)
+
+entrada_edad = tk.Entry(
+    frame_paciente,
+    width=25
+)
+
+entrada_edad.grid(
+    row=2,
+    column=1,
+    padx=5
+)
+
+
+tk.Label(
+    frame_paciente,
+    text="Sexo:"
+).grid(row=2, column=2, padx=5)
+
+entrada_sexo = tk.Entry(
+    frame_paciente,
+    width=20
+)
+
+entrada_sexo.grid(
+    row=2,
+    column=3,
+    padx=5
+)
+
+
+# FILA 4
+
+tk.Label(
+    frame_paciente,
+    text="F. nacimiento:"
+).grid(row=3, column=0, padx=5, pady=5)
+
+entrada_fecha_nacimiento = tk.Entry(
+    frame_paciente,
+    width=25
+)
+
+entrada_fecha_nacimiento.grid(
+    row=3,
+    column=1,
+    padx=5
+)
+
+
+tk.Label(
+    frame_paciente,
+    text="Procedencia:"
+).grid(row=3, column=2, padx=5)
+
+entrada_procedencia = tk.Entry(
+    frame_paciente,
+    width=20
+)
+
+entrada_procedencia.grid(
+    row=3,
+    column=3,
+    padx=5
+)
+
+
+# FILA 5
+
+tk.Label(
+    frame_paciente,
+    text="Grado instrucción:"
+).grid(row=4, column=0, padx=5, pady=5)
+
+entrada_grado = tk.Entry(
+    frame_paciente,
+    width=25
+)
+
+entrada_grado.grid(
+    row=4,
+    column=1,
+    padx=5
+)
+
+
+tk.Label(
+    frame_paciente,
+    text="Estado civil:"
+).grid(row=4, column=2, padx=5)
+
+entrada_estado_civil = tk.Entry(
+    frame_paciente,
+    width=20
+)
+
+entrada_estado_civil.grid(
+    row=4,
+    column=3,
+    padx=5
+)
+
+
+# FILA 6
+
+tk.Label(
+    frame_paciente,
+    text="Ocupación:"
+).grid(row=5, column=0, padx=5, pady=5)
+
+entrada_ocupacion = tk.Entry(
+    frame_paciente,
+    width=25
+)
+
+entrada_ocupacion.grid(
+    row=5,
+    column=1,
+    padx=5
+)
+
+
+tk.Label(
+    frame_paciente,
+    text="Acompañante:"
+).grid(row=5, column=2, padx=5)
+
+entrada_acompanante = tk.Entry(
+    frame_paciente,
+    width=20
+)
+
+entrada_acompanante.grid(
+    row=5,
+    column=3,
+    padx=5
+)
+
+
+# FILA 7
+
+tk.Label(
+    frame_paciente,
+    text="Parentesco:"
+).grid(row=6, column=0, padx=5, pady=5)
+
+entrada_parentesco = tk.Entry(
+    frame_paciente,
+    width=25
+)
+
+entrada_parentesco.grid(
+    row=6,
+    column=1,
+    padx=5
+)
+
+
+tk.Label(
+    frame_paciente,
+    text="Tel. acompañante:"
+).grid(row=6, column=2, padx=5)
+
+entrada_telefono_acompanante = tk.Entry(
+    frame_paciente,
+    width=20
+)
+
+entrada_telefono_acompanante.grid(
+    row=6,
+    column=3,
+    padx=5
+)
+
+
+# FRAME CITA
+
+frame_cita = tk.LabelFrame(
+    ventana,
+    text="Datos de la cita",
+    padx=10,
+    pady=10
+)
+
+frame_cita.pack(
+    padx=15,
+    pady=5,
+    fill="x"
+)
+
+
+tk.Label(
+    frame_cita,
+    text="Médico:"
+).grid(row=0, column=0, padx=5, pady=5)
+
+entrada_medico = tk.Entry(
+    frame_cita,
+    width=25
+)
+
+entrada_medico.grid(
+    row=0,
+    column=1,
+    padx=5
+)
+
+
+tk.Label(
+    frame_cita,
+    text="Ej.: Dr. Carlos Perez"
+).grid(
+    row=0,
+    column=2,
+    padx=5
+)
+
+
+tk.Label(
+    frame_cita,
+    text="Fecha:"
+).grid(row=1, column=0, padx=5, pady=5)
+
+entrada_fecha_cita = tk.Entry(
+    frame_cita,
+    width=25
+)
+
+entrada_fecha_cita.grid(
+    row=1,
+    column=1,
+    padx=5
+)
+
+
+tk.Label(
+    frame_cita,
+    text="Ej.: 25/09/2026"
+).grid(
+    row=1,
+    column=2,
+    padx=5
+)
+
+
+tk.Label(
+    frame_cita,
+    text="Hora:"
+).grid(row=2, column=0, padx=5, pady=5)
+
+entrada_hora_cita = tk.Entry(
+    frame_cita,
+    width=25
+)
+
+entrada_hora_cita.grid(
+    row=2,
+    column=1,
+    padx=5
+)
+
+
+tk.Label(
+    frame_cita,
+    text="Ej.: 09:00"
+).grid(
+    row=2,
+    column=2,
+    padx=5
+)
+
+
+# BOTONES PRINCIPALES
+
+frame_botones = tk.Frame(ventana)
+
+frame_botones.pack(pady=10)
+
+
+tk.Button(
+    frame_botones,
+    text="AGENDAR CITA",
+    command=controlador.agendar,
+    width=20
+).grid(row=0, column=0, padx=5)
+
+
+tk.Button(
+    frame_botones,
+    text="REGISTRAR ATENCIÓN",
+    command=controlador.atender,
+    width=20
+).grid(row=0, column=1, padx=5)
+
+
+tk.Button(
+    frame_botones,
+    text="VER PACIENTES",
+    command=controlador.ver_pacientes,
+    width=20
+).grid(row=0, column=2, padx=5)
+
+
+tk.Button(
+    frame_botones,
+    text="CANCELAR CITA",
+    command=controlador.cancelar,
+    width=20
+).grid(row=0, column=3, padx=5)
+
+
+tk.Button(
+    frame_botones,
+    text="ESTADÍSTICAS",
+    command=controlador.estadisticas,
+    width=20
+).grid(row=1, column=0, padx=5, pady=5)
+
+
+tk.Button(
+    frame_botones,
+    text="LIMPIAR",
+    command=controlador.limpiar,
+    width=20
+).grid(row=1, column=1, padx=5, pady=5)
+
+
+# BÚSQUEDA Y CONSULTA
+# RF04 + RF06
+
+frame_busqueda = tk.LabelFrame(
+    ventana,
+    text="Búsqueda y consulta",
+    padx=10,
+    pady=10
+)
+
+frame_busqueda.pack(
+    padx=15,
+    pady=5,
+    fill="x"
+)
+
+
+tk.Label(
+    frame_busqueda,
+    text="Nombre:"
+).grid(
+    row=0,
+    column=0,
+    padx=5
+)
+
+
+entrada_busqueda_nombre = tk.Entry(
+    frame_busqueda,
+    width=25
+)
+
+entrada_busqueda_nombre.grid(
+    row=0,
+    column=1,
+    padx=5
+)
+
+
+tk.Button(
+    frame_busqueda,
+    text="BUSCAR PACIENTE",
+    command=controlador.buscar
+).grid(
+    row=0,
+    column=2,
+    padx=10
+)
+
+
+tk.Label(
+    frame_busqueda,
+    text="DNI:"
+).grid(
+    row=1,
+    column=0,
+    padx=5,
+    pady=5
+)
+
+
+entrada_busqueda_dni = tk.Entry(
+    frame_busqueda,
+    width=25
+)
+
+entrada_busqueda_dni.grid(
+    row=1,
+    column=1,
+    padx=5
+)
+
+
+tk.Button(
+    frame_busqueda,
+    text="CONSULTAR HISTORIA",
+    command=controlador.historia
+).grid(
+    row=1,
+    column=2,
+    padx=10
+)
+
+
+# LISTA DE CITAS
+
+tk.Label(
+    ventana,
+    text="CITAS AGENDADAS",
+    font=("Arial", 12, "bold")
+).pack(pady=5)
+
+
+lista_citas = tk.Listbox(
+    ventana,
+    width=135,
+    height=7
+)
+
+lista_citas.pack(
+    padx=15,
+    pady=5
+)
+
+
+# LISTA DE ATENCIONES
+
+tk.Label(
+    ventana,
+    text="ATENCIONES MÉDICAS REGISTRADAS",
+    font=("Arial", 12, "bold")
+).pack(pady=5)
+
+
+lista_atenciones = tk.Listbox(
+    ventana,
+    width=135,
+    height=6
+)
+
+lista_atenciones.pack(
+    padx=15,
+    pady=5
+)
+
+
+# PIE DE SISTEMA
+
+tk.Label(
+    ventana,
+    text=(
+        "Prototipo de viabilidad - Clínica Club Salud | "
+        "POO + Programación Funcional + Estructurada"
+    ),
+    font=("Arial", 9)
+).pack(pady=8)
+
+
+# INICIAR SISTEMA
+
+ventana.mainloop()
+
 
