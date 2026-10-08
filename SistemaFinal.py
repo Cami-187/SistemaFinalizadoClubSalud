@@ -852,3 +852,287 @@ def agendar_cita():
             + "Revise los datos o contacte al administrador."
         )
 
+# REGISTRAR ATENCIÓN MÉDICA
+# RF03
+
+def registrar_atencion():
+    if not autorizar_acceso_clinico():
+        return
+
+    ventana_atencion = tk.Toplevel(ventana)
+
+    ventana_atencion.title(
+        "Registrar atención médica"
+    )
+
+    ventana_atencion.geometry(
+        "550x500"
+    )
+
+    # --------------------------------------------------------
+    # PACIENTE
+    # --------------------------------------------------------
+
+    tk.Label(
+        ventana_atencion,
+        text="DNI del paciente:"
+    ).pack(pady=5)
+
+    entrada_dni_atencion = tk.Entry(
+        ventana_atencion,
+        width=40
+    )
+
+    entrada_dni_atencion.pack()
+
+    # --------------------------------------------------------
+    # MÉDICO
+    # --------------------------------------------------------
+
+    tk.Label(
+        ventana_atencion,
+        text="Médico:"
+    ).pack(pady=5)
+
+    entrada_medico_atencion = tk.Entry(
+        ventana_atencion,
+        width=40
+    )
+
+    entrada_medico_atencion.pack()
+
+    # --------------------------------------------------------
+    # FECHA
+    # --------------------------------------------------------
+
+    tk.Label(
+        ventana_atencion,
+        text="Fecha:"
+    ).pack(pady=5)
+
+    entrada_fecha_atencion = tk.Entry(
+        ventana_atencion,
+        width=40
+    )
+
+    entrada_fecha_atencion.pack()
+
+    # --------------------------------------------------------
+    # MOTIVO
+    # --------------------------------------------------------
+
+    tk.Label(
+        ventana_atencion,
+        text="Motivo de consulta:"
+    ).pack(pady=5)
+
+    entrada_motivo = tk.Entry(
+        ventana_atencion,
+        width=40
+    )
+
+    entrada_motivo.pack()
+
+    # --------------------------------------------------------
+    # DIAGNÓSTICO
+    # --------------------------------------------------------
+
+    tk.Label(
+        ventana_atencion,
+        text="Diagnóstico:"
+    ).pack(pady=5)
+
+    entrada_diagnostico = tk.Entry(
+        ventana_atencion,
+        width=40
+    )
+
+    entrada_diagnostico.pack()
+
+    # --------------------------------------------------------
+    # TRATAMIENTO
+    # --------------------------------------------------------
+
+    tk.Label(
+        ventana_atencion,
+        text="Tratamiento:"
+    ).pack(pady=5)
+
+    entrada_tratamiento = tk.Entry(
+        ventana_atencion,
+        width=40
+    )
+
+    entrada_tratamiento.pack()
+
+    # --------------------------------------------------------
+    # GUARDAR
+    # --------------------------------------------------------
+
+    def guardar_atencion():
+
+        dni = entrada_dni_atencion.get().strip()
+        nombre_medico = (
+            entrada_medico_atencion.get().strip()
+        )
+        fecha = entrada_fecha_atencion.get().strip()
+        motivo = entrada_motivo.get().strip()
+        diagnostico = entrada_diagnostico.get().strip()
+        tratamiento = entrada_tratamiento.get().strip()
+
+        if not validar_campos_obligatorios(
+            [
+                dni,
+                nombre_medico,
+                fecha,
+                motivo,
+                diagnostico,
+                tratamiento
+            ]
+        ):
+
+            messagebox.showwarning(
+                "Datos incompletos",
+                "Complete todos los campos."
+            )
+
+            return
+
+        if not validar_dni(dni) or not validar_fecha(fecha):
+            messagebox.showwarning("Datos incorrectos", "Ingrese DNI de 8 dígitos y fecha DD/MM/AAAA.")
+            return
+
+        paciente = buscar_paciente_por_dni(dni)
+
+        if paciente is None:
+
+            messagebox.showerror(
+                "Paciente no encontrado",
+                "No existe un paciente registrado "
+                "con ese DNI."
+            )
+
+            return
+
+        medico = buscar_medico_por_nombre(
+            nombre_medico
+        )
+
+        if medico is None:
+
+            messagebox.showerror(
+                "Médico no encontrado",
+                "El médico ingresado no existe."
+            )
+
+            return
+
+        codigo = generar_codigo_atencion()
+
+        nueva_atencion = AtencionMedica(
+            codigo,
+            paciente,
+            medico,
+            fecha,
+            motivo,
+            diagnostico,
+            tratamiento
+        )
+
+        atenciones.append(
+            nueva_atencion
+        )
+
+        lista_atenciones.insert(
+            tk.END,
+            nueva_atencion.mostrar_atencion()
+        )
+
+        messagebox.showinfo(
+            "Atención registrada",
+            "La atención médica fue registrada "
+            "correctamente.\n\n"
+            "Código: " + codigo
+        )
+
+        ventana_atencion.destroy()
+
+    tk.Button(
+        ventana_atencion,
+        text="REGISTRAR ATENCIÓN",
+        command=guardar_atencion,
+        width=25
+    ).pack(pady=20)
+
+
+# CONSULTAR HISTORIA CLÍNICA
+# RF04
+
+def consultar_historia():
+    if not autorizar_acceso_clinico():
+        return
+
+    dni = entrada_busqueda_dni.get().strip()
+
+    if dni == "":
+
+        messagebox.showwarning(
+            "Dato requerido",
+            "Ingrese el DNI del paciente."
+        )
+
+        return
+
+    paciente = buscar_paciente_por_dni(dni)
+
+    if paciente is None:
+
+        messagebox.showerror(
+            "Paciente no encontrado",
+            "No existe un paciente con ese DNI."
+        )
+
+        return
+
+    atenciones_paciente = obtener_atenciones_paciente(
+        paciente
+    )
+
+    texto = (
+        "HISTORIA CLÍNICA AUTORIZADA\n"
+        "\n"
+        + paciente.mostrar_datos()
+        + "\n\n"
+        + "ATENCIONES MÉDICAS\n"
+        + "--------------------------------\n"
+    )
+
+    if len(atenciones_paciente) == 0:
+
+        texto += "No existen atenciones registradas."
+
+    else:
+
+        for atencion in atenciones_paciente:
+
+            texto += (
+                "\nCódigo: "
+                + atencion.get_codigo()
+                + "\nFecha: "
+                + atencion.get_fecha()
+                + "\nMédico: "
+                + atencion.get_medico().get_nombre()
+                + "\nMotivo: "
+                + atencion.get_motivo()
+                + "\nDiagnóstico: "
+                + atencion.get_diagnostico()
+                + "\nTratamiento: "
+                + atencion.get_tratamiento()
+                + "\n--------------------------------\n"
+            )
+
+    messagebox.showinfo(
+        "Historia clínica",
+        texto
+    )
+
