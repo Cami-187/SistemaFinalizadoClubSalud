@@ -495,3 +495,62 @@ def obtener_atenciones_paciente(paciente):
             atenciones
         )
     )
+
+# OBTENER NOMBRES
+# PROGRAMACIÓN FUNCIONAL: MAP
+
+def obtener_nombres_pacientes():
+
+    return list(
+        map(
+            lambda paciente:
+            paciente.get_nombre(),
+            pacientes
+        )
+    )
+
+
+# OBTENER DIAGNÓSTICOS
+# PROGRAMACIÓN FUNCIONAL: MAP
+
+def obtener_diagnosticos():
+
+    return list(
+        map(
+            lambda atencion:
+            atencion.get_diagnostico(),
+            atenciones
+        )
+    )
+
+
+# ESTADÍSTICA
+# PROGRAMACIÓN FUNCIONAL: REDUCE
+
+def contar_atenciones():
+
+    total = reduce(
+        lambda acumulado, atencion:
+        acumulado + 1,
+        atenciones,
+        0
+    )
+
+    return total
+
+
+# CONTAR ATENCIONES POR ESPECIALIDAD
+
+def contar_por_especialidad(especialidad):
+
+    resultado = list(
+        filter(
+            lambda atencion:
+            atencion.get_medico().get_especialidad()
+            == especialidad,
+            atenciones
+        )
+    )
+
+    return len(resultado)
+
