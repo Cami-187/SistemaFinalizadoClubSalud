@@ -431,3 +431,67 @@ medicos.append(
     )
 )
 
+# FUNCIONES DE BÚSQUEDA
+# PROGRAMACIÓN FUNCIONAL: FILTER
+
+# 3. BUSQUEDAS Y PROCESAMIENTO DE DATOS
+def buscar_paciente_por_dni(dni):
+
+    resultado = list(
+        filter(
+            lambda paciente:
+            paciente.get_dni() == dni,
+            pacientes
+        )
+    )
+
+    if len(resultado) > 0:
+        return resultado[0]
+
+    return None
+
+
+def buscar_paciente_por_nombre(nombre):
+
+    resultado = list(
+        filter(
+            lambda paciente:
+            nombre.lower()
+            in paciente.get_nombre().lower(),
+            pacientes
+        )
+    )
+
+    return resultado
+
+
+def buscar_medico_por_nombre(nombre):
+
+    resultado = list(
+        filter(
+            lambda medico:
+            medico.get_nombre().lower()
+            == nombre.lower(),
+            medicos
+        )
+    )
+
+    if len(resultado) > 0:
+        return resultado[0]
+
+    return None
+
+
+# BÚSQUEDA DE ATENCIONES DE UN PACIENTE
+# PROGRAMACIÓN FUNCIONAL: FILTER
+
+def obtener_atenciones_paciente(paciente):
+
+    return list(
+        filter(
+            lambda atencion:
+            atencion.get_paciente().get_codigo()
+            == paciente.get_codigo(),
+            atenciones
+        )
+    )
