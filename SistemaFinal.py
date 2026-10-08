@@ -376,3 +376,58 @@ class AtencionMedica:
 # SINGLETON: una sola gestion de las colecciones de la clinica.
 # AGREGACION: los pacientes existen como objetos independientes del gestor.
 # 2. GESTION CENTRALIZADA (SINGLETON)
+class GestorClinica:
+    _instancia = None
+
+    def __new__(cls):
+        if cls._instancia is None:
+            cls._instancia = super().__new__(cls)
+            cls._instancia.pacientes = []
+            cls._instancia.medicos = []
+            cls._instancia.citas = []
+            cls._instancia.atenciones = []
+        return cls._instancia
+
+    def registrar_paciente(self, paciente):
+        self.pacientes.append(paciente)
+
+    def registrar_cita(self, cita):
+        self.citas.append(cita)
+
+    def registrar_atencion(self, atencion):
+        self.atenciones.append(atencion)
+
+
+gestor = GestorClinica()
+pacientes = gestor.pacientes
+medicos = gestor.medicos
+citas = gestor.citas
+atenciones = gestor.atenciones
+
+
+# DATOS INICIALES DE MÉDICOS
+
+medicos.append(
+    Medico(
+        "M001",
+        "Dr. Carlos Perez",
+        "Medicina General"
+    )
+)
+
+medicos.append(
+    Medico(
+        "M002",
+        "Dra. Maria Lopez",
+        "Pediatria"
+    )
+)
+
+medicos.append(
+    Medico(
+        "M003",
+        "Dr. Juan Torres",
+        "Medicina Interna"
+    )
+)
+
