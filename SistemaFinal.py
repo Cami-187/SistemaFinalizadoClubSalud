@@ -1217,7 +1217,7 @@ def buscar_paciente():
 # RF05
 # MAP + FILTER + REDUCE
 
-def mostrar_estadisticas():
+def mostrar_estadisticas(diagnosticos=None):
 
     total_pacientes = len(pacientes)
     total_citas = len(citas)
