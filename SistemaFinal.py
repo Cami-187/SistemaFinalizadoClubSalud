@@ -1136,3 +1136,186 @@ def consultar_historia():
         texto
     )
 
+# MOSTRAR PACIENTES
+# RF06
+
+def mostrar_pacientes():
+
+    if len(pacientes) == 0:
+
+        messagebox.showinfo(
+            "Pacientes",
+            "No hay pacientes registrados."
+        )
+
+        return
+
+    nombres = obtener_nombres_pacientes()
+
+    texto = "PACIENTES REGISTRADOS\n\n"
+
+    for nombre in nombres:
+
+        texto += "- " + nombre + "\n"
+
+    messagebox.showinfo(
+        "Pacientes",
+        texto
+    )
+
+
+# BUSCAR PACIENTE POR NOMBRE
+# RF06
+# PROGRAMACIÓN FUNCIONAL
+
+def buscar_paciente():
+
+    nombre = entrada_busqueda_nombre.get().strip()
+
+    if nombre == "":
+
+        messagebox.showwarning(
+            "Dato requerido",
+            "Ingrese un nombre para buscar."
+        )
+
+        return
+
+    resultados = buscar_paciente_por_nombre(
+        nombre
+    )
+
+    if len(resultados) == 0:
+
+        messagebox.showinfo(
+            "Resultado",
+            "No se encontraron pacientes."
+        )
+
+        return
+
+    texto = "RESULTADOS DE BÚSQUEDA\n\n"
+
+    for paciente in resultados:
+
+        texto += (
+            paciente.get_codigo()
+            + " | "
+            + paciente.get_nombre()
+            + " | DNI: "
+            + ocultar_dni(paciente.get_dni())
+            + "\n"
+        )
+
+    messagebox.showinfo(
+        "Pacientes encontrados",
+        texto
+    )
+
+
+# MOSTRAR ESTADÍSTICAS
+# RF05
+# MAP + FILTER + REDUCE
+
+def mostrar_estadisticas():
+
+    total_pacientes = len(pacientes)
+    total_citas = len(citas)
+    total_atenciones = contar_atenciones()
+
+
+    texto = (
+        "ESTADÍSTICAS DEL SISTEMA\n\n"
+        "Total de pacientes: "
+        + str(total_pacientes)
+        + "\n"
+        "Total de citas: "
+        + str(total_citas)
+        + "\n"
+        "Total de atenciones: "
+        + str(total_atenciones)
+        + "\n\n"
+        "ATENCIONES POR ESPECIALIDAD\n"
+        "--------------------------------\n"
+    )
+
+    for medico in medicos:
+
+        especialidad = medico.get_especialidad()
+
+        cantidad = contar_por_especialidad(
+            especialidad
+        )
+
+        texto += (
+            especialidad
+            + ": "
+            + str(cantidad)
+            + "\n"
+        )
+
+    texto += (
+        "\nDIAGNÓSTICOS REGISTRADOS\n"
+        "--------------------------------\n"
+    )
+
+    if len(diagnosticos) == 0:
+
+        texto += "No existen diagnósticos registrados."
+
+    else:
+
+        for diagnostico in diagnosticos:
+
+            texto += "- " + diagnostico + "\n"
+
+    messagebox.showinfo(
+        "Estadísticas",
+        texto
+    )
+
+
+# CANCELAR CITA
+# PROGRAMACIÓN ESTRUCTURADA
+
+def cancelar_cita():
+
+    seleccion = lista_citas.curselection()
+
+    if len(seleccion) == 0:
+
+        messagebox.showwarning(
+            "Seleccionar cita",
+            "Seleccione una cita de la lista."
+        )
+
+        return
+
+    indice = seleccion[0]
+
+    cita = citas[indice]
+
+    if cita.get_estado() == "Cancelada":
+
+        messagebox.showinfo(
+            "Cita",
+            "La cita ya se encuentra cancelada."
+        )
+
+        return
+
+    cita.cambiar_estado("Cancelada")
+
+    lista_citas.delete(indice)
+
+    lista_citas.insert(
+        indice,
+        cita.mostrar_cita()
+    )
+
+    messagebox.showinfo(
+        "Cita cancelada",
+        "La cita fue cancelada correctamente."
+    )
+
+
