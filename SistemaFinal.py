@@ -554,3 +554,63 @@ def contar_por_especialidad(especialidad):
 
     return len(resultado)
 
+
+# VERIFICAR DISPONIBILIDAD
+# RF02
+
+def verificar_disponibilidad(
+    medico,
+    fecha,
+    hora
+):
+
+    resultado = list(
+        filter(
+            lambda cita:
+            cita.get_medico().get_codigo()
+            == medico.get_codigo()
+            and cita.get_fecha() == fecha
+            and cita.get_hora() == hora
+            and cita.get_estado() == "Programada",
+            citas
+        )
+    )
+
+    return len(resultado) == 0
+
+
+# GENERAR CÓDIGOS
+
+def generar_codigo_paciente():
+
+    numero = len(pacientes) + 1
+
+    return "P" + str(numero).zfill(3)
+
+
+def generar_codigo_cita():
+
+    numero = len(citas) + 1
+
+    return "C" + str(numero).zfill(3)
+
+
+def generar_codigo_atencion():
+
+    numero = len(atenciones) + 1
+
+    return "A" + str(numero).zfill(3)
+
+
+# VALIDAR CAMPOS
+# PROGRAMACIÓN ESTRUCTURADA
+
+def validar_campos_obligatorios(campos):
+
+    for campo in campos:
+
+        if campo.strip() == "":
+            return False
+
+    return True
+
